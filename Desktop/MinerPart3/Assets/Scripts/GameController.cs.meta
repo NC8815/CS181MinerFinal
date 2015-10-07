@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 633876d2aa3780445be2063e0028f214
+timeCreated: 1444201032
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - prefabBronze: {fileID: 162326, guid: e42ef97ee08ef234aa267a1aadd9e6c0, type: 2}
+  - prefabSilver: {fileID: 128782, guid: 9509bf0258b87614bad6c2a82eb544b9, type: 2}
+  - prefabGold: {fileID: 125394, guid: b7cc5c42881ba8d4db67cafc652dc533, type: 2}
+  - gameCamera: {instanceID: 0}
+  - backdrop: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
