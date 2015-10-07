@@ -6,21 +6,19 @@ public class Cube : MonoBehaviour {
 	public int myPoints;
 	GameObject myController;
 
-	bool isRotating = false;
+	bool isRotating = false; //used to track whether the cube is currently rotating for mouseOver purposes
 
 	float growthRate = 2f; //absolute scale increase per second
-	float rotationRate = 90f;
+	float rotationRate = 90f; //degrees per second
 
-	Vector3 randRotAxis;
+	Vector3 randRotAxis;//used in changeRotation
 
 	// Use this for initialization
 	void Start () {
-		gameObject.transform.localScale = new Vector3(0,0,0);
-		randRotAxis = Random.onUnitSphere;
+		gameObject.transform.localScale = new Vector3(0,0,0);//scaling in from 0
+		randRotAxis = Random.onUnitSphere;//setting the first rotation axis
 		StartCoroutine ("changeScale", 1);
-		//StartCoroutine ("changeRotation", Quaternion.AngleAxis (90, rotationAxis));
 		StartCoroutine ("changeRotation", 0.5f);
-		//lastRotationAxis = Quaternion.AngleAxis (10, Random.onUnitSphere) * lastRotationAxis;
 	}
 	//this function gets called by the game controller, giving the cube the controller's reference,
 	// so this cube can send information back to the controller, which eliminates the need to use 
@@ -34,7 +32,7 @@ public class Cube : MonoBehaviour {
 		myController.GetComponent<GameController> ().changeScore (myPoints);
 		Destroy (gameObject);
 	}
-
+	//this function scales the cube to the target scale at growthRate per second.
 	IEnumerator changeScale(float targetScale){
 		Vector3 startScale = gameObject.transform.localScale;
 		Vector3 endScale = new Vector3(targetScale,targetScale,targetScale);
@@ -46,7 +44,7 @@ public class Cube : MonoBehaviour {
 	}
 	/*Ok, so this function needs some explanation. randRotAxis is initialzed on creation as a random unit vector. This function shifts that axis
 	 * 15 degrees in a random direction, then rotates the cube around that axis for rotDuration seconds. The isRotating bools at the beginning 
-	 * and end allow OnMouseOver to check if this rotation is currently running so it doesn't start it on top of itself. An explanation of 
+	 * and end allow OnMouseOver to check if this rotation is currently running so it doesn't start it redundantly. An explanation of 
 	 * Quaternions is beyond the scope of a comment, but there are plenty of resources at Unity3D.com
 	 * (check docs.unity3d.com/ScriptReference/Quaternion.html   
 	 */
@@ -84,15 +82,3 @@ public class Cube : MonoBehaviour {
 	
 	}
 }
-/*
-	IEnumerator changeRotation(Quaternion targetRotation){
-		isRotating = true;
-		Quaternion startRotation = gameObject.transform.rotation;
-		float rotDuration = Quaternion.Angle (targetRotation, startRotation) / rotationRate;
-		for (float t = 0; t < rotDuration; t += Time.deltaTime) {
-			gameObject.transform.rotation = Quaternion.Slerp (startRotation, targetRotation, t / rotDuration);
-			yield return null;
-		}
-		isRotating = false;
-		rotationAxis = Quaternion.AngleAxis (45, Random.onUnitSphere) * rotationAxis;
-	}/**/
