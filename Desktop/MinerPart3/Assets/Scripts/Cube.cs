@@ -4,6 +4,8 @@ using System.Collections;
 public class Cube : MonoBehaviour {
 	public oreType myType;
 	public int myPoints;
+	public GameObject textPrefab;
+
 	GameObject myController;
 
 	bool isRotating = false;
@@ -32,6 +34,8 @@ public class Cube : MonoBehaviour {
 	void OnMouseDown(){
 		myController.GetComponent<GameController> ().dropCube (gameObject);
 		myController.GetComponent<GameController> ().changeScore (myPoints);
+		GameObject myFadePoints = Instantiate (textPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+		myFadePoints.GetComponent<PointsText> ().pointsToShow (myPoints);
 		Destroy (gameObject);
 	}
 
