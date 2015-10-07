@@ -115,13 +115,14 @@ public class GameController : MonoBehaviour {
 	
 	// this loop will try up to 100 times to find an empty spawnpoint in the camera field, then increase the size of 
 	// subsequent searches every 100 times until it finds a spawn point. This will ALWAYS find a spawn point,
-	// so make sure you have a way to limit the spawn somewhere else! see function spawnLocIsValid
-	//the +/- 1 on spawnSize gives a border for the spawn area just inside the camera border.
+	// so addCube won't actually spawn the cube if there are too many, and the size of the spawn area being dependant 
+	// the max number of cubes ensures there will be room for a cube in the spawn area.
+	//the - 1 on spawnSize gives a border for the spawn area just inside the camera border.
 
 	Vector3 getSpawnPoint(){
 		float spawnSize = targetCameraSize - 1; //simplifying further declarations...
 		float aspectRatio = gameCamera.GetComponent<Camera> ().aspect;
-		Vector3 camera = targetCameraLoc;
+		Vector3 camera = targetCameraLoc; //we base the spawn field on where the camera SHOULD be, not where it is, because it may not be finished moving
 
 		float spawnXMin = camera.x - (spawnSize) * aspectRatio;//borders of the spawn area
 		float spawnXMax = camera.x + (spawnSize) * aspectRatio;
@@ -130,7 +131,8 @@ public class GameController : MonoBehaviour {
 
 		float testX = Random.Range(spawnXMin,spawnXMax); //test point
 		float testY = Random.Range(spawnYMin,spawnYMax);
-		//search for a point
+		//search for a point, physics checksphere returns true if anything is colliding with a sphere at that point. That is, 
+		// if there's no room there, it returns true, so continue with the search loop.
 		do{	for(int spawnAttempts = 0; spawnAttempts < 100 && Physics.CheckSphere(new Vector3(testX,testY),1.5f);spawnAttempts++){
 				testX = Random.Range(spawnXMin,spawnXMax);
 				testY = Random.Range(spawnYMin,spawnYMax);}
@@ -139,7 +141,7 @@ public class GameController : MonoBehaviour {
 			spawnYMin --; 
 			spawnYMax ++;
 		} while (Physics.CheckSphere(new Vector3(testX,testY),1.5f));//did we find a point? if not, keep searching
-		return new Vector2 (testX, testY);
+		return new Vector2 (testX, testY); //once the final checksphere returns false (found an empty space)
 	}
 
 	//This function finds the furthest out values of x and y that contain cubes, and changes the zoom and location of the camera. 
@@ -212,6 +214,7 @@ public class GameController : MonoBehaviour {
 			                                            Mathf.Lerp (locCameraLastCentered.y, targetCameraLoc.y, t),
 			                                             -10);
 		}
+		//moving the backdrop and making sure it fills the camera
 		backdrop.transform.position = new Vector3 (gameCamera.transform.position.x, gameCamera.transform.position.y, backdrop.transform.position.z);
 		if (gameCamera.GetComponent<Camera> ().aspect >= 1) {
 			backdrop.transform.localScale = 0.2f * Mathf.Sqrt (maxNumCubes) * gameCamera.GetComponent<Camera> ().aspect  * Vector3.one;
