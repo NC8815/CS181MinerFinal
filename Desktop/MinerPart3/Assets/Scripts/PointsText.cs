@@ -18,7 +18,7 @@ public class PointsText : MonoBehaviour {
 		if (Time.time < (spawnTime + duration)) {
 			Color newColor = gameObject.GetComponent<TextMesh>().color;
 			newColor.a = 1 - (Time.time - spawnTime) / duration;
-			print((Time.time - spawnTime)/duration);
+			//print((Time.time - spawnTime)/duration);
 			gameObject.GetComponent<Renderer> ().material.color = newColor;
 			gameObject.transform.Translate(Time.deltaTime * upVelocity * Vector3.up);
 		} else {
